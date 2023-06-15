@@ -111,9 +111,6 @@ char* AddNumbers(char* num1, char* num2)
 	}
 	//if maximum>minimum, we need to continue and add any digits of maxStr plus whatever carries may propagate due to the per digit summation of
 	//minStr and maxStr
-	if (strcmp("8756875876533987", num2) == 0) {
-		printf("here");
-	}
 	for (int j = maximum - minimum -1; j >= 0; j--) {
 		int sumCarry = carryOver + (maxStr[j] - '0');
 		int dig = sumCarry;
@@ -146,7 +143,21 @@ char* AddNumbers(char* num1, char* num2)
 //Q4
 int* CreateRange(int start, int end, int jump, int* sizeRage)
 {
-	
+	int counter = 0;
+	int min = start;
+	while (min <= end) {
+		min += jump;
+		counter++;
+	}
+	*sizeRage = counter;
+	int* finiteSeqence = (int*)malloc(sizeof(int)*counter);
+	if (finiteSeqence == NULL) {
+		return NULL;
+	}
+	for (int i = 0; i < counter; i++) {
+		finiteSeqence[i] = start + i * jump;
+	}
+	return finiteSeqence;
 }
 //-----------------------------------------------------------------------------------------------//
 //Q5
