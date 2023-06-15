@@ -124,42 +124,42 @@ void Test5B(int* arr1, int* arr2, int size_arr)
 
 int main() {
 	
-	//printf("Exercise 1\n");
-	Test1("126", "345", "123456");
-	Test1("Hello", "Hello", "HHeelllloo");
-	Test1("12357", "7", "123577");
-	Test1("++C", "++C", "++++CC");
-	Test1("abc", "ABCD", "ABCDabc");
-	// 20 Points
+	////printf("Exercise 1\n");
+	//Test1("126", "345", "123456");
+	//Test1("Hello", "Hello", "HHeelllloo");
+	//Test1("12357", "7", "123577");
+	//Test1("++C", "++C", "++++CC");
+	//Test1("abc", "ABCD", "ABCDabc");
+	//// 20 Points
 
-	//printf("Exercise 2\n");
-	int res_size;
-	char* arr_p1[SIZE1] = { "hello","bye","buy","true","false","dad","mom" ,"good" };
-	char* arr_p2[SIZE2] = { "to", "be",  "or", "not", "to", "be", "that", "is", "the", "question" };
-	char* arr_p3[SIZE3] = { "hasta", "la", "vista", "baby"};
-	Test2(arr_p1, SIZE1, "grandpa", 5, "bye");
-	Test2(arr_p1, SIZE1, "grandpa", 5, "good");
-	Test2(arr_p2, SIZE2, "shakespeare", 6, "or");
-	Test2(arr_p2, SIZE2, "shakespeare", 6, "or");
-	Test2(arr_p3, SIZE3, "terminator", 3, "baby");
-	// 20 Points
+	////printf("Exercise 2\n");
+	//int res_size;
+	//char* arr_p1[SIZE1] = { "hello","bye","buy","true","false","dad","mom" ,"good" };
+	//char* arr_p2[SIZE2] = { "to", "be",  "or", "not", "to", "be", "that", "is", "the", "question" };
+	//char* arr_p3[SIZE3] = { "hasta", "la", "vista", "baby"};
+	//Test2(arr_p1, SIZE1, "grandpa", 5, "bye");
+	//Test2(arr_p1, SIZE1, "grandpa", 5, "good");
+	//Test2(arr_p2, SIZE2, "shakespeare", 6, "or");
+	//Test2(arr_p2, SIZE2, "shakespeare", 6, "or");
+	//Test2(arr_p3, SIZE3, "terminator", 3, "baby");
+	//// 20 Points
 
-	//printf("Exercise 3\n");
-	Test3("104104", "203203", "307307");
-	Test3("0", "765", "765");
-	Test3("6539876", "99", "6539975");
-	Test3("8875643","8756875876533987","8756875885409630");
-	Test3("65768796453436", "686756453446", "66455552906882");
-	Test3("99999", "1", "100000");
-	// 20 Points
-	
-	//printf("Exercise 4\n");
-	Test4(1, 10, 1, 10);
-	Test4(1, 10, 2, 5);
-	Test4(2, 10, 2, 5);
-	Test4(-1, 10, 3, 4);
-	Test4(1, 10, 11, 1);
-	// 20 Points
+	////printf("Exercise 3\n");
+	//Test3("104104", "203203", "307307");
+	//Test3("0", "765", "765");
+	//Test3("6539876", "99", "6539975");
+	//Test3("8875643","8756875876533987","8756875885409630");
+	//Test3("65768796453436", "686756453446", "66455552906882");
+	//Test3("99999", "1", "100000");
+	//// 20 Points
+	//
+	////printf("Exercise 4\n");
+	//Test4(1, 10, 1, 10);
+	//Test4(1, 10, 2, 5);
+	//Test4(2, 10, 2, 5);
+	//Test4(-1, 10, 3, 4);
+	//Test4(1, 10, 11, 1);
+	//// 20 Points
 
 	//printf("Exercise 5\n");
 	int grades[SIZE_GRADES] = {98,45,77,65,89,90,100,43,54,67,55,88,76,67,33,23,45,76,72,76};

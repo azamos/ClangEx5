@@ -56,6 +56,10 @@ char** LowerSTR(char* arr[], int size_arr, char* str, int* size_res)
 				free(lowerSTR);
 				return NULL;
 			}
+			/*
+			* TODO: since testing env is on a linux system,
+			* CHANGE to sctrcpy, and remove middle argument
+			*/
 			strcpy_s(lowerSTR[index],size*sizeof(char),arr[i]);
 			index++;
 			if (index == counter) {
@@ -133,6 +137,10 @@ char* AddNumbers(char* num1, char* num2)
 			free(summationResult);
 			return NULL;
 		}
+		/*
+		* TODO: since testing env is on a linux system,
+		* CHANGE to sctrcpy, and remove middle argument
+		*/
 		strcpy_s(overFlowedStr + 1, (maximum + 1) * sizeof(char), summationResult);
 		overFlowedStr[0] = '1';
 		free(summationResult);
@@ -172,7 +180,7 @@ int** GradeStat(int* Grades, int size_grades, int grd_range, int* count_grd, int
 		return NULL;
 	}
 	/*
-	* Using calloc, since I want all avgs to be set to 0
+	* Using calloc, since I want all avgs to be initiated as 0
 	*/
 	avg_grd = (int*)calloc(amountOfSubArrays, sizeof(int));
 	if (avg_grd == NULL) {
@@ -180,19 +188,24 @@ int** GradeStat(int* Grades, int size_grades, int grd_range, int* count_grd, int
 		return NULL;
 	}
 
+	/*
+	* First for loop: populate counter_grd array with the relevant counts,
+	* and sum grades into avg_grd, so that later they can be divided by counter_grd,
+	* and thus we obtain the average.
+	*/
 	for(int i=0;i<size_grades;i++){
-		int j = Grades[i] / grd_range;
-		count_grd[j]++;
-		avg_grd[j] += Grades[i];//will be divided later by count_grd's appropriate counter
+		int j = Grades[i] / grd_range;//Match the grade to the appropriate index in count_grd and in avg_grd
+		count_grd[j]= count_grd[j]+1;
+		avg_grd[j] = avg_grd[j]+Grades[i];//will be divided later by count_grd's appropriate counter
 		//TODOremember to later go over again and divide by count_grd[Grades[i]/grd_range]
 	}
-	for (int i = 0; i < size_grades; i++) {
-		if (count_grd[Grades[i] / grd_range]) {//REDUNDENT CHECK, I need to remove it later on.
-			avg_grd[Grades[i] / grd_range] /= count_grd[Grades[i] / grd_range];
-			//Here I set the avgs, since previously I summed the grades for the range,
-			//And now I divide by their ammount, and it is ok, since counter!=0. 
+	/*
+	* Second for loop: now we divide the grade sums by the counter.
+	*/
+	for (int i = 0; i < amountOfSubArrays; i++) {
+		if (count_grd[i]) {//Dual purpose: Only need to set avg where
+			avg_grd[i] = avg_grd[i]/count_grd[i];
 		}
-		
 	}
 	int** gradesGroupedByRange = (int**)malloc(sizeof(int*) * amountOfSubArrays);
 	if (gradesGroupedByRange == NULL) {
@@ -201,33 +214,29 @@ int** GradeStat(int* Grades, int size_grades, int grd_range, int* count_grd, int
 		return NULL;
 	}
 	/*
-	* the loop below sets all of the sub-arrays to either NULL(if matching counter is 0) or
-	* to a dynamicaly allocated array of integers of a size equall to the matching counter
+	* Third for loop: sets all of the sub-arrays to either NULL(if matching counter is 0) or
+	* to a dynamicaly allocated array of integers of a size equall to the matching counter.
 	*/
 	for (int i = 0; i < size_grades; i++) {
-		int j = Grades[i] / grd_range;
-		if(count_grd[j]){
-			int* p = (int*)malloc(sizeof(int) * count_grd[j]);
-			if (p == NULL) {//Need to release all previously dynamicaly allocated memory
-				//first, other sub-arrays may have been dynamically allocated already, so we free them first:
-				for (int k = 0; k < amountOfSubArrays; k++) {
-					if (gradesGroupedByRange[k] != NULL) {
-						free(gradesGroupedByRange[k]);
-					}
+		int j = Grades[i] / grd_range;//Match the grade to the appropriate index in count_grd and in avg_grd AND
+									 //in gradesGroupedByRange
+		int* p = (int*)malloc(sizeof(int) * count_grd[j]);
+		if (p == NULL) {//Need to release all previously dynamicaly allocated memory
+			//first, other sub-arrays may have been dynamically allocated already, so we free them first:
+			for (int k = 0; k < amountOfSubArrays; k++) {
+				if (gradesGroupedByRange[k] != NULL) {
+					free(gradesGroupedByRange[k]);
 				}
-				//then, we free the memory we allocated for count_grd and for avg_grd
-				free(count_grd);
-				free(avg_grd);
-				return NULL;
 			}
-			gradesGroupedByRange[j] = p;
-			for (int t = 0; t < count_grd[j]; t++) {
-				p[t] = -1;//Since 0 is a viabale grade, I decided to indicate that an array cell is
-				//free to use, by desginating it with -1.
-			}
+			//then, we free the memory we allocated for count_grd and for avg_grd
+			free(count_grd);
+			free(avg_grd);
+			return NULL;
 		}
-		else {
-			gradesGroupedByRange[j] = NULL;//No grades belong in this sub-arr, thus we set it to NULL.
+		gradesGroupedByRange[j] = p;
+		for (int t = 0; t < count_grd[j]; t++) {
+			p[t] = -1;//Since 0 is a viabale grade, I decided to indicate that an array cell is
+			//free to use, by desginating it with -1.
 		}
 	}
 	//Now, for the last step, to populate gradesGroupedByRange[Grades[i] / grd_range] with the relevant grades:
