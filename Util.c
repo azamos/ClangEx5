@@ -78,8 +78,8 @@ char* AddNumbers(char* num1, char* num2)
 	* carry overs to justify an additional digit(Most Significant Bit), I will allocate new memory with 
 	* (max({n1,n2})+1)+1 memory.
 	*/
-	int cmpRes = strcmp(num1, num2);
-	char* maxStr = cmpRes > 0 ? num1 : num2;
+	int cmpRes = strlen(num1)-strlen(num2);
+	char* maxStr = cmpRes >= 0 ? num1 : num2;
 	char* minStr = cmpRes < 0 ? num1 : num2;
 	int maximum = strlen(maxStr);
 	int minimum = strlen(minStr);
@@ -103,7 +103,7 @@ char* AddNumbers(char* num1, char* num2)
 		else {
 			carryOver = 0;
 		}
-		summationResult[i] = '0' + digit_i;
+		summationResult[i + maximum - minimum] = '0' + digit_i;
 		i--;
 	}
 	if (maximum == minimum && carryOver == 0) {
@@ -111,6 +111,9 @@ char* AddNumbers(char* num1, char* num2)
 	}
 	//if maximum>minimum, we need to continue and add any digits of maxStr plus whatever carries may propagate due to the per digit summation of
 	//minStr and maxStr
+	if (strcmp("8756875876533987", num2) == 0) {
+		printf("here");
+	}
 	for (int j = maximum - minimum -1; j >= 0; j--) {
 		int sumCarry = carryOver + (maxStr[j] - '0');
 		int dig = sumCarry;
