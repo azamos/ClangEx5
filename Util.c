@@ -181,15 +181,16 @@ int** GradeStat(int* Grades, int size_grades, int grd_range, int* count_grd, int
 	}
 
 	for(int i=0;i<size_grades;i++){
-		count_grd[Grades[i] / grd_range]++;
-		avg_grd[Grades[i] / grd_range] += Grades[i];
+		int j = Grades[i] / grd_range;
+		count_grd[j]++;
+		avg_grd[j] += Grades[i];//will be divided later by count_grd's appropriate counter
 		//TODOremember to later go over again and divide by count_grd[Grades[i]/grd_range]
 	}
 	for (int i = 0; i < size_grades; i++) {
-		if (count_grd[Grades[i] / grd_range]) {
-			avg_grd[Grades[i] / grd_range] /= count_grd[i];
+		if (count_grd[Grades[i] / grd_range]) {//REDUNDENT CHECK, I need to remove it later on.
+			avg_grd[Grades[i] / grd_range] /= count_grd[Grades[i] / grd_range];
 			//Here I set the avgs, since previously I summed the grades for the range,
-			//And now I divide by their ammount, and it is ok, since counter!=0
+			//And now I divide by their ammount, and it is ok, since counter!=0. 
 		}
 		
 	}
@@ -199,25 +200,44 @@ int** GradeStat(int* Grades, int size_grades, int grd_range, int* count_grd, int
 		free(avg_grd);
 		return NULL;
 	}
+	/*
+	* the loop below sets all of the sub-arrays to either NULL(if matching counter is 0) or
+	* to a dynamicaly allocated array of integers of a size equall to the matching counter
+	*/
 	for (int i = 0; i < size_grades; i++) {
 		int j = Grades[i] / grd_range;
 		if(count_grd[j]){
 			int* p = (int*)malloc(sizeof(int) * count_grd[j]);
 			if (p == NULL) {//Need to release all previously dynamicaly allocated memory
+				//first, other sub-arrays may have been dynamically allocated already, so we free them first:
 				for (int k = 0; k < amountOfSubArrays; k++) {
 					if (gradesGroupedByRange[k] != NULL) {
 						free(gradesGroupedByRange[k]);
 					}
 				}
+				//then, we free the memory we allocated for count_grd and for avg_grd
 				free(count_grd);
 				free(avg_grd);
 				return NULL;
 			}
 			gradesGroupedByRange[j] = p;
+			for (int t = 0; t < count_grd[j]; t++) {
+				p[t] = -1;//Since 0 is a viabale grade, I decided to indicate that an array cell is
+				//free to use, by desginating it with -1.
+			}
 		}
 		else {
-			gradesGroupedByRange[j] = NULL;
+			gradesGroupedByRange[j] = NULL;//No grades belong in this sub-arr, thus we set it to NULL.
 		}
+	}
+	//Now, for the last step, to populate gradesGroupedByRange[Grades[i] / grd_range] with the relevant grades:
+	for (int i = 0; i < size_grades; i++) {
+		int j = Grades[i] / grd_range;
+		int* ptr = gradesGroupedByRange[j];
+		while (*ptr != -1) {
+			ptr++;
+		}
+		*ptr = Grades[i];
 	}
 	return gradesGroupedByRange;
 }

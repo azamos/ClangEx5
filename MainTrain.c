@@ -160,26 +160,26 @@ int main() {
 	Test4(-1, 10, 3, 4);
 	Test4(1, 10, 11, 1);
 	// 20 Points
-//
-//	//printf("Exercise 5\n");
-//	int grades[SIZE_GRADES] = {98,45,77,65,89,90,100,43,54,67,55,88,76,67,33,23,45,76,72,76};
-//	int avg_grd1[100 / GRD_RANGE1 + 1];
-//	int avg_grd2[100 / GRD_RANGE2 + 1];
-//	int count_grd1[100 / GRD_RANGE1 + 1];
-//	int count_grd2[100 / GRD_RANGE2 + 1];
-//	int** arr1 = GradeStat(grades, SIZE_GRADES, GRD_RANGE1, count_grd1, avg_grd1);
-//	int** arr2 = GradeStat(grades, SIZE_GRADES, GRD_RANGE2, count_grd2, avg_grd2);
-//
-//	Test5A(arr1, 100 / GRD_RANGE1 + 1, count_grd1, 8, 88);
-//	Test5A(arr1, 100 / GRD_RANGE1 + 1, count_grd1, 10, 100);
-//	Test5A(arr2, 100 / GRD_RANGE2 + 1, count_grd2, 11, 77);
-//	
-//	int avg_grd1_test[100 / GRD_RANGE1 + 1] = {0,0,23,33,44,54,66,75,88,94,100};
-//	int count_grd2_test[100 / GRD_RANGE2 + 1] = {0,0,0,1,1,0,3,2,0,3,4,1,3,0,2};
-//
-//	Test5B(avg_grd1, avg_grd1_test, 100 / GRD_RANGE1 + 1);
-//	Test5B(count_grd2, count_grd2_test, 100 / GRD_RANGE2 + 1);
-////20 points
+
+	//printf("Exercise 5\n");
+	int grades[SIZE_GRADES] = {98,45,77,65,89,90,100,43,54,67,55,88,76,67,33,23,45,76,72,76};
+	int avg_grd1[100 / GRD_RANGE1 + 1];
+	int avg_grd2[100 / GRD_RANGE2 + 1];
+	int count_grd1[100 / GRD_RANGE1 + 1];
+	int count_grd2[100 / GRD_RANGE2 + 1];
+	int** arr1 = GradeStat(grades, SIZE_GRADES, GRD_RANGE1, count_grd1, avg_grd1);
+	int** arr2 = GradeStat(grades, SIZE_GRADES, GRD_RANGE2, count_grd2, avg_grd2);
+
+	Test5A(arr1, 100 / GRD_RANGE1 + 1, count_grd1, 8, 88);
+	Test5A(arr1, 100 / GRD_RANGE1 + 1, count_grd1, 10, 100);
+	Test5A(arr2, 100 / GRD_RANGE2 + 1, count_grd2, 11, 77);
+	
+	int avg_grd1_test[100 / GRD_RANGE1 + 1] = {0,0,23,33,44,54,66,75,88,94,100};
+	int count_grd2_test[100 / GRD_RANGE2 + 1] = {0,0,0,1,1,0,3,2,0,3,4,1,3,0,2};
+
+	Test5B(avg_grd1, avg_grd1_test, 100 / GRD_RANGE1 + 1);
+	Test5B(count_grd2, count_grd2_test, 100 / GRD_RANGE2 + 1);
+//20 points
 	printf("done");
 	return 0;
 }
