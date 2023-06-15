@@ -163,6 +163,62 @@ int* CreateRange(int start, int end, int jump, int* sizeRage)
 //Q5
 int** GradeStat(int* Grades, int size_grades, int grd_range, int* count_grd, int* avg_grd)
 {
-	
+	int amountOfSubArrays = (100 / grd_range) + 1;
+	/*
+	* Using calloc, since I want all counters to be set to 0
+	*/
+	count_grd = (int*)calloc(amountOfSubArrays,sizeof(int));
+	if (count_grd == NULL) {
+		return NULL;
+	}
+	/*
+	* Using calloc, since I want all avgs to be set to 0
+	*/
+	avg_grd = (int*)calloc(amountOfSubArrays, sizeof(int));
+	if (avg_grd == NULL) {
+		free(count_grd);
+		return NULL;
+	}
+
+	for(int i=0;i<size_grades;i++){
+		count_grd[Grades[i] / grd_range]++;
+		avg_grd[Grades[i] / grd_range] += Grades[i];
+		//TODOremember to later go over again and divide by count_grd[Grades[i]/grd_range]
+	}
+	for (int i = 0; i < size_grades; i++) {
+		if (count_grd[Grades[i] / grd_range]) {
+			avg_grd[Grades[i] / grd_range] /= count_grd[i];
+			//Here I set the avgs, since previously I summed the grades for the range,
+			//And now I divide by their ammount, and it is ok, since counter!=0
+		}
+		
+	}
+	int** gradesGroupedByRange = (int**)malloc(sizeof(int*) * amountOfSubArrays);
+	if (gradesGroupedByRange == NULL) {
+		free(count_grd);
+		free(avg_grd);
+		return NULL;
+	}
+	for (int i = 0; i < size_grades; i++) {
+		int j = Grades[i] / grd_range;
+		if(count_grd[j]){
+			int* p = (int*)malloc(sizeof(int) * count_grd[j]);
+			if (p == NULL) {//Need to release all previously dynamicaly allocated memory
+				for (int k = 0; k < amountOfSubArrays; k++) {
+					if (gradesGroupedByRange[k] != NULL) {
+						free(gradesGroupedByRange[k]);
+					}
+				}
+				free(count_grd);
+				free(avg_grd);
+				return NULL;
+			}
+			gradesGroupedByRange[j] = p;
+		}
+		else {
+			gradesGroupedByRange[j] = NULL;
+		}
+	}
+	return gradesGroupedByRange;
 }
 //-----------------------------------------------------------------------------------------------//
