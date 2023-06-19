@@ -11,23 +11,35 @@ char* PairSortedArrays(char a[], char b[])
 		return NULL;
 	}
 	//If we got here, then it means that pairedString is NOT NULL.
-	char* p1 = a;
-	char* p1End = a + n1;
-	char* p2 = b;
-	char* p2End = b + n2;
-	char* p3 = pairedString;
-	while (p1 != p1End&& p2 != p2End) {
-		*(p3++) = *p1 <= *p2 ? *(p1++) : *(p2++);
+	pairedString[n1 + n2] = '\0';
+	int i=0, j=0, k = 0;
+	while (j<n1&&k<n2) {
+		if (a[j] <= b[k]) {
+			pairedString[i] = a[j];
+			j++;
+		}
+		else {
+			pairedString[i] = b[k];
+			k++;
+		}
+		i++;
 	}
-	if (p1 != p1End) {
-		while (p1 != p1End) {
-			*(p3++) = *(p1++);
+	//Now, if there are leftover letters in either of a,b
+	//they will complete the missing letters of pairedString
+	if (j < n1) {
+		while (j < n1) {
+			pairedString[i] = a[j];
+			i++;
+			j++;
 		}
 	}
-	if (p2 != p2End) {
-		*(p3++) = *(p2++);
+	if (k < n2) {
+		while (k < n2) {
+			pairedString[i] = b[k];
+			i++;
+			k++;
+		}
 	}
-	*p3 = '\0';
 	return pairedString;
 }
 //-----------------------------------------------------------------------------------------------//
@@ -60,7 +72,7 @@ char** LowerSTR(char* arr[], int size_arr, char* str, int* size_res)
 			* TODO: since testing env is on a linux system,
 			* CHANGE to sctrcpy, and remove middle argument
 			*/
-			strcpy_s(lowerSTR[index],size*sizeof(char),arr[i]);
+			strcpy(lowerSTR[index],arr[i]);
 			index++;
 			if (index == counter) {
 				break;
@@ -141,7 +153,7 @@ char* AddNumbers(char* num1, char* num2)
 		* TODO: since testing env is on a linux system,
 		* CHANGE to sctrcpy, and remove middle argument
 		*/
-		strcpy_s(overFlowedStr + 1, (maximum + 1) * sizeof(char), summationResult);
+		strcpy(overFlowedStr + 1,summationResult);
 		overFlowedStr[0] = '1';
 		free(summationResult);
 		return overFlowedStr;
