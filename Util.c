@@ -171,83 +171,73 @@ int* CreateRange(int start, int end, int jump, int* sizeRage)
 //Q5
 int** GradeStat(int* Grades, int size_grades, int grd_range, int* count_grd, int* avg_grd)
 {
-	int amountOfSubArrays = (100 / grd_range) + 1;
-	/*
-	* Using calloc, since I want all counters to be set to 0
-	*/
-	count_grd = (int*)calloc(amountOfSubArrays,sizeof(int));
-	if (count_grd == NULL) {
-		return NULL;
-	}
-	/*
-	* Using calloc, since I want all avgs to be initiated as 0
-	*/
-	avg_grd = (int*)calloc(amountOfSubArrays, sizeof(int));
-	if (avg_grd == NULL) {
-		free(count_grd);
-		return NULL;
-	}
 
-	/*
-	* First for loop: populate counter_grd array with the relevant counts,
-	* and sum grades into avg_grd, so that later they can be divided by counter_grd,
-	* and thus we obtain the average.
-	*/
-	for(int i=0;i<size_grades;i++){
-		int j = Grades[i] / grd_range;//Match the grade to the appropriate index in count_grd and in avg_grd
-		count_grd[j]= count_grd[j]+1;
-		avg_grd[j] = avg_grd[j]+Grades[i];//will be divided later by count_grd's appropriate counter
-		//TODOremember to later go over again and divide by count_grd[Grades[i]/grd_range]
-	}
-	/*
-	* Second for loop: now we divide the grade sums by the counter.
-	*/
-	for (int i = 0; i < amountOfSubArrays; i++) {
-		if (count_grd[i]) {//Dual purpose: Only need to set avg where
-			avg_grd[i] = avg_grd[i]/count_grd[i];
-		}
-	}
-	int** gradesGroupedByRange = (int**)malloc(sizeof(int*) * amountOfSubArrays);
-	if (gradesGroupedByRange == NULL) {
-		free(count_grd);
-		free(avg_grd);
+	int size = (100 / grd_range) + 1;
+	int** gradeStat = (int**)malloc(sizeof(int*) * size);
+	if (!gradeStat) {
 		return NULL;
 	}
 	/*
-	* Third for loop: sets all of the sub-arrays to either NULL(if matching counter is 0) or
-	* to a dynamicaly allocated array of integers of a size equall to the matching counter.
+	* Initializing count_grd and avg_grd with zeros
+	*/
+	for (int i = 0; i < size; i++) {
+		count_grd[i] = 0;
+		avg_grd[i] = 0;
+	}
+	/*
+	* Populating count_grd with the counts,
+	* and summing grades into avg_grd, later
+	* to be divided by the counts in count_grd
 	*/
 	for (int i = 0; i < size_grades; i++) {
-		int j = Grades[i] / grd_range;//Match the grade to the appropriate index in count_grd and in avg_grd AND
-									 //in gradesGroupedByRange
-		int* p = (int*)malloc(sizeof(int) * count_grd[j]);
-		if (p == NULL) {//Need to release all previously dynamicaly allocated memory
-			//first, other sub-arrays may have been dynamically allocated already, so we free them first:
-			for (int k = 0; k < amountOfSubArrays; k++) {
-				if (gradesGroupedByRange[k] != NULL) {
-					free(gradesGroupedByRange[k]);
-				}
+		int grade = Grades[i];
+		int j = grade / grd_range;//the relevant index for this grade
+		count_grd[j] ++;
+		avg_grd[j] += grade;
+	}
+	/*
+	* setting the averages in avg_grd, now that we have both the sum
+	* of grades, and how many per range there are.
+	*/
+	for (int i = 0; i < size; i++) {
+		if (count_grd[i]) {
+			avg_grd[i] /= count_grd[i];
+		}
+	}
+	/*
+	* Here I already have the size of each range's array,
+	* so now I alloacte the required memory,
+	* and set all the cells to -1,
+	* to indicate a cell which has not been populated with a grade yet,
+	* since 0 is a legitimate grade.
+	*/
+	for (int i = 0; i < size; i++) {
+		gradeStat[i] = (int*)malloc(sizeof(int*) * count_grd[i]);
+		if (gradeStat[i] == NULL) {
+			//First, need to free all previously allocated memory:
+			for (int k = 0; k < i; k++) {
+				free(gradeStat[k]);
 			}
-			//then, we free the memory we allocated for count_grd and for avg_grd
-			free(count_grd);
-			free(avg_grd);
 			return NULL;
 		}
-		gradesGroupedByRange[j] = p;
-		for (int t = 0; t < count_grd[j]; t++) {
-			p[t] = -1;//Since 0 is a viabale grade, I decided to indicate that an array cell is
-			//free to use, by desginating it with -1.
+		/*
+		* if we got here, all memory allocations were successfull,
+		* thus I can initialize the cells to -1
+		*/
+		for (int j = 0; j < count_grd[i]; j++) {
+			*(gradeStat[i] + j) = -1;
 		}
 	}
-	//Now, for the last step, to populate gradesGroupedByRange[Grades[i] / grd_range] with the relevant grades:
+	/*
+	* At long last, populating the range arrays with the appropriate grades
+	*/
 	for (int i = 0; i < size_grades; i++) {
-		int j = Grades[i] / grd_range;
-		int* ptr = gradesGroupedByRange[j];
-		while (*ptr != -1) {
-			ptr++;
+		int j = 0;
+		while (*(gradeStat[Grades[i] / grd_range] + j) > 0) {
+			j++;
 		}
-		*ptr = Grades[i];
+		*(gradeStat[Grades[i] / grd_range] + j) = Grades[i];
 	}
-	return gradesGroupedByRange;
+	return gradeStat;
 }
 //-----------------------------------------------------------------------------------------------//
